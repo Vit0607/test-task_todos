@@ -1,0 +1,11 @@
+.todo {
+  padding: 20px 5px;
+  border: 1px solid #ccc;
+  display: flex;
+  margin-top: -1px;
+
+  .completed {
+    text-decoration: line-through;
+    color: #ccc;
+  }
+}

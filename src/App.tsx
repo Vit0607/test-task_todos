@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useCallback, useEffect, useState } from 'react';
+import type { Todo } from './types/todo';
+import { DEFAULT_TODO_LIST } from './mocks/defaultTodoList';
+import './components/SingleTodo/SingleTodo';
+
+import './App.css';
+import SingleTodo from './components/SingleTodo/SingleTodo';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    setData(DEFAULT_TODO_LIST);
+  }, []);
+
+  useEffect(() => {
+    console.log('dataChanged: ', data);
+  }, [data]);
+
+  const handleChange = (checked: boolean, index: number) => {
+    setData(prev => {
+      prev[index].isDone = checked;
+      return [...prev];
+    });
+  };
+
+  const listenChange = useCallback((checked: boolean, index: number) => {
+    handleChange(checked, index);
+  }, []);
 
   return (
     <>
+      <h1>Todos</h1>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input />
+        <ul>
+          {data?.map((toDo: Todo, index: number) => (
+            <SingleTodo
+              id={toDo.id}
+              title={toDo.title}
+              isDone={toDo.isDone}
+              index={index}
+              toggleIsDone={listenChange}
+              key={toDo.id}
+            />
+          ))}
+        </ul>
+        <div>Нижняя панель</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
