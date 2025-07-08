@@ -1,11 +1,22 @@
 .todo {
-  padding: 20px 5px;
-  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border: 1px solid var(--color-grey);
   display: flex;
   margin-top: -1px;
+  gap: 10px;
+  height: 52px;
+  align-items: center;
 
-  .completed {
-    text-decoration: line-through;
-    color: #ccc;
+  .checkbox {
+    margin-top: 10px;
+  }
+
+  label {
+    font-size: 24px;
+
+    &.completed {
+      text-decoration: line-through;
+      color: var(--color-grey);
+    }
   }
 }

@@ -21,6 +21,7 @@ const SingleTodo = ({
         type="checkbox"
         checked={isDone}
         onChange={e => toggleIsDone(e.target.checked, index)}
+        className={styles.checkbox}
       />
       <label htmlFor={title} className={isDone ? styles.completed : ''}>
         {title}
