@@ -4,13 +4,7 @@ import type { SingleTodoProps } from './SingleTodo.props';
 
 import styles from './SingleTodo.module.scss';
 
-const SingleTodo = ({
-  id,
-  title,
-  isDone,
-  toggleIsDone,
-  index
-}: SingleTodoProps) => {
+const SingleTodo = ({ id, title, isDone, toggleIsDone }: SingleTodoProps) => {
   console.log(`TODO_${id}`);
 
   return (
@@ -20,7 +14,7 @@ const SingleTodo = ({
         name={title}
         type="checkbox"
         checked={isDone}
-        onChange={e => toggleIsDone(e.target.checked, index)}
+        onChange={e => toggleIsDone(id, e.target.checked)}
         className={styles.checkbox}
       />
       <label htmlFor={title} className={isDone ? styles.completed : ''}>

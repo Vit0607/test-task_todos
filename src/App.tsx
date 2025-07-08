@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useState,
   type ChangeEvent,
   type FormEvent
@@ -20,6 +21,7 @@ function App() {
   const [data, setData] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newTodo, setNewTodo] = useState('');
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
   const getTodos = async () => {
     setIsLoading(true);
@@ -33,19 +35,32 @@ function App() {
     }
   };
 
+  const filteredTodos = useMemo(() => {
+    if (filter === 'active') {
+      return data.filter(todo => !todo.isDone);
+    }
+    if (filter === 'completed') {
+      return data.filter(todo => todo.isDone);
+    }
+    return data;
+  }, [data, filter]);
+
+  const clearCompleted = () => {
+    setData(data.filter(todo => todo.isDone === false));
+  };
+
   useEffect(() => {
     getTodos();
   }, []);
 
-  const handleChange = (checked: boolean, index: number) => {
-    setData(prev => {
-      prev[index].isDone = checked;
-      return [...prev];
-    });
+  const handleChange = (id: number, checked: boolean) => {
+    setData(prev =>
+      prev.map(todo => (todo.id === id ? { ...todo, isDone: checked } : todo))
+    );
   };
 
-  const listenChange = useCallback((checked: boolean, index: number) => {
-    handleChange(checked, index);
+  const listenChange = useCallback((id: number, checked: boolean) => {
+    handleChange(id, checked);
   }, []);
 
   const addTodo = (e: FormEvent) => {
@@ -62,6 +77,8 @@ function App() {
     setData([...data, task]);
     setNewTodo('');
   };
+
+  const activeItemsCount = data.filter(todo => todo.isDone === false).length;
 
   return (
     <div className={styles.wrapper}>
@@ -80,22 +97,31 @@ function App() {
             <Button disabled={Boolean(!newTodo.trim())}>Добавить</Button>
           </form>
           <ul className={styles.list}>
-            {isLoading ? (
-              <div className={styles.loading}>Загрузка...</div>
-            ) : (
-              data?.map((toDo: Todo, index: number) => (
+            {isLoading && <div className={styles.loading}>Загрузка...</div>}
+
+            {!isLoading &&
+              filteredTodos.map(toDo => (
                 <SingleTodo
                   id={toDo.id}
                   title={toDo.title}
                   isDone={toDo.isDone}
-                  index={index}
                   toggleIsDone={listenChange}
                   key={toDo.id}
                 />
-              ))
-            )}
+              ))}
           </ul>
-          <div>Нижняя панель</div>
+          <div className={styles.footer}>
+            <div className={styles.count}>
+              {activeItemsCount}{' '}
+              {activeItemsCount == 1 ? 'item left' : 'items left'}
+            </div>
+            <div className={styles.buttonsOfLists}>
+              <Button onClick={() => setFilter('all')}>All</Button>
+              <Button onClick={() => setFilter('active')}>Active</Button>
+              <Button onClick={() => setFilter('completed')}>Completed</Button>
+            </div>
+            <Button onClick={clearCompleted}>Clear Completed</Button>
+          </div>
         </div>
       </div>
     </div>

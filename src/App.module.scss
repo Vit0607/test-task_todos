@@ -49,5 +49,24 @@
         border-left: 1px solid var(--color-grey);
       }
     }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 50px;
+      padding: 5px 10px;
+      border: 1px solid var(--color-grey);
+      margin-top: -1px;
+
+      button {
+        font-weight: normal;
+      }
+
+      .buttonsOfLists {
+        gap: 5px;
+        display: flex;
+      }
+    }
   }
 }
