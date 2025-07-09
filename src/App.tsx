@@ -11,7 +11,7 @@ import type { Todo } from './types/todo';
 import { DEFAULT_TODO_LIST } from './mocks/defaultTodoList';
 import './components/SingleTodo/SingleTodo';
 import SingleTodo from './components/SingleTodo/SingleTodo';
-import { delay } from './utils/delay';
+import delay from './utils/delay';
 import Button from './components/SingleTodo/ui/Button/Button';
 import Input from './components/SingleTodo/ui/Input/Input';
 
@@ -99,7 +99,12 @@ function App() {
           <ul className={styles.list}>
             {isLoading && <div className={styles.loading}>Загрузка...</div>}
 
+            {!isLoading && filteredTodos.length === 0 && (
+              <div className={styles.empty}>Нет задач</div>
+            )}
+
             {!isLoading &&
+              filteredTodos.length > 0 &&
               filteredTodos.map(toDo => (
                 <SingleTodo
                   id={toDo.id}

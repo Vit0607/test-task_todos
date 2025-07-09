@@ -5,8 +5,6 @@ import type { SingleTodoProps } from './SingleTodo.props';
 import styles from './SingleTodo.module.scss';
 
 const SingleTodo = ({ id, title, isDone, toggleIsDone }: SingleTodoProps) => {
-  console.log(`TODO_${id}`);
-
   return (
     <li className={styles.todo} key={id}>
       <input
